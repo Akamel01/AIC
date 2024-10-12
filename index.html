@@ -17,49 +17,33 @@
             padding: 0;
         }
 
-        /* Week Navigation Styling (Buttons + Month Display) */
+        /* Week Navigation Styling */
         .week-navigation {
             display: flex;
-            justify-content: center;
             align-items: center;
-            margin: 20px 0;
-            font-size: 18px;
-            font-weight: bold;
-            color: #5f6368;
-            position: relative;
+            margin-bottom: 10px;
         }
 
-        .nav-arrow {
+        .week-navigation .nav-arrow {
             cursor: pointer;
             font-size: 24px;
             color: #5f6368;
-            position: absolute;
-            left: 20px; /* Align the previous button */
-            top: 50%;
-            transform: translateY(-50%);
+            margin-right: 10px;
+            position: relative;
         }
 
-        .nav-arrow.right {
-            left: 60px; /* Position the next button next to the prev */
-        }
-
-        /* Ensure the hover effect doesn't shift content */
-        .nav-arrow:hover {
+        .week-navigation .nav-arrow:hover {
             background-color: #eee;
             border-radius: 50%;
             padding: 5px;
         }
 
-        /* Prevent content shifting on hover by using fixed padding */
-        .nav-arrow {
-            padding: 5px;
-        }
-
-        /* Month and Year Text */
+        /* Month-Year styling, starts after the next button */
         #currentWeek {
-            margin-left: 80px; /* Space from buttons */
-            text-align: center;
-            width: 100%;
+            font-size: 18px;
+            font-weight: bold;
+            color: #5f6368;
+            margin-left: 10px; /* Space after the next button */
         }
 
         /* Calendar Grid */
@@ -74,6 +58,26 @@
             border-radius: 8px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
             overflow: hidden;
+        }
+
+        /* Positioning the buttons on top of the first day column */
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 20px 0;
+            position: relative;
+        }
+
+        .day-header {
+            position: relative;
+        }
+
+        .nav-arrows {
+            position: absolute;
+            top: -40px;
+            left: 0;
+            display: flex;
         }
 
         .time-label, .day-header, .time-slot {
@@ -130,10 +134,12 @@
 </head>
 <body>
 
-<!-- Week Navigation with Fixed Buttons and Month Display -->
+<!-- Week Navigation and Month-Year Text -->
 <div class="week-navigation">
-    <span class="nav-arrow" id="prevWeek">&#x276E;</span> <!-- Left arrow -->
-    <span class="nav-arrow right" id="nextWeek">&#x276F;</span> <!-- Right arrow -->
+    <div class="nav-arrows">
+        <span class="nav-arrow" id="prevWeek">&#x276E;</span> <!-- Left arrow -->
+        <span class="nav-arrow" id="nextWeek">&#x276F;</span> <!-- Right arrow -->
+    </div>
     <span id="currentWeek">Oct 2024</span> <!-- Month-Year -->
 </div>
 
