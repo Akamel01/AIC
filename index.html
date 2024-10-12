@@ -20,9 +20,10 @@
         /* Week Navigation Styling */
         .week-navigation {
             display: flex;
-            justify-content: center;
             align-items: center;
             margin-bottom: 10px;
+            position: relative;
+            left: 70px; /* Aligns the navigation to be above the first column */
         }
 
         .nav-arrow {
@@ -58,26 +59,6 @@
             border-radius: 8px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
             overflow: hidden;
-        }
-
-        /* Positioning the buttons on top of the first day column */
-        .nav-container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin: 20px 0;
-            position: relative;
-        }
-
-        .day-header {
-            position: relative;
-        }
-
-        .nav-arrows {
-            position: absolute;
-            top: -40px;
-            left: 0;
-            display: flex;
         }
 
         .time-label, .day-header, .time-slot {
