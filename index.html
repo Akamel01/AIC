@@ -18,7 +18,7 @@
         }
 
         /* Navigation Styling (Google Calendar Style) */
-        .month-navigation {
+        .week-navigation {
             display: flex;
             justify-content: center;
             align-items: center;
@@ -33,6 +33,12 @@
             margin: 0 20px;
             font-size: 24px;
             color: #5f6368;
+        }
+
+        .nav-arrow:hover {
+            background-color: #eee;
+            border-radius: 50%;
+            padding: 5px;
         }
 
         /* Calendar Grid */
@@ -103,11 +109,11 @@
 </head>
 <body>
 
-<!-- Month and Year Navigation -->
-<div class="month-navigation">
-    <span class="nav-arrow" id="prevMonth">&#x276E;</span> <!-- Left arrow -->
-    <span id="currentMonth">Oct 2024</span> <!-- Month-Year -->
-    <span class="nav-arrow" id="nextMonth">&#x276F;</span> <!-- Right arrow -->
+<!-- Week Navigation with Buttons and Dual Month Display -->
+<div class="week-navigation">
+    <span class="nav-arrow" id="prevWeek">&#x276E;</span> <!-- Left arrow -->
+    <span id="currentWeek">Oct 2024</span> <!-- Month-Year -->
+    <span class="nav-arrow" id="nextWeek">&#x276F;</span> <!-- Right arrow -->
 </div>
 
 <div class="calendar-container" id="calendarContainer">
@@ -116,7 +122,7 @@
 
 <script>
     const calendarContainer = document.getElementById('calendarContainer');
-    const currentMonthLabel = document.getElementById('currentMonth');
+    const currentWeekLabel = document.getElementById('currentWeek');
     let currentDate = new Date();
 
     // Function to generate the calendar
@@ -167,10 +173,10 @@
             }
         }
 
-        // Update the current month label based on whether the week spans two months
+        // Update the current week label based on whether the week spans two months
         const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
         const displayMonth = secondMonth === null ? `${monthNames[firstMonth]} ${currentDate.getFullYear()}` : `${monthNames[firstMonth]} – ${monthNames[secondMonth]} ${currentDate.getFullYear()}`;
-        currentMonthLabel.textContent = displayMonth;
+        currentWeekLabel.textContent = displayMonth;
     }
 
     // Helper function to get the start of the current week (Sunday)
@@ -189,14 +195,14 @@
         return `${displayHour}:00 ${period}`; // Single-line time format
     }
 
-    // Event listeners for month navigation (similar to week navigation)
-    document.getElementById('prevMonth').addEventListener('click', () => {
-        currentDate.setMonth(currentDate.getMonth() - 1);
+    // Event listeners for week navigation (move by 7 days instead of months)
+    document.getElementById('prevWeek').addEventListener('click', () => {
+        currentDate.setDate(currentDate.getDate() - 7); // Move back 1 week
         generateTimeSlots();
     });
 
-    document.getElementById('nextMonth').addEventListener('click', () => {
-        currentDate.setMonth(currentDate.getMonth() + 1);
+    document.getElementById('nextWeek').addEventListener('click', () => {
+        currentDate.setDate(currentDate.getDate() + 7); // Move forward 1 week
         generateTimeSlots();
     });
 
