@@ -1,0 +1,78 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Calendar</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+        }
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        form input, form button {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        form button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        form button:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>AI Calendar</h1>
+        <form id="taskForm">
+            <input type="text" id="taskName" placeholder="Task Name" required>
+            <input type="datetime-local" id="taskDeadline" required>
+            <button type="submit">Add Task</button>
+        </form>
+        <div id="taskList"></div>
+    </div>
+
+    <script>
+        document.getElementById('taskForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const taskName = document.getElementById('taskName').value;
+            const taskDeadline = document.getElementById('taskDeadline').value;
+            
+            if (taskName && taskDeadline) {
+                const taskList = document.getElementById('taskList');
+                const newTask = document.createElement('div');
+                newTask.textContent = `Task: ${taskName}, Deadline: ${new Date(taskDeadline).toLocaleString()}`;
+                taskList.appendChild(newTask);
+                
+                document.getElementById('taskForm').reset();
+            }
+        });
+    </script>
+</body>
+</html>
