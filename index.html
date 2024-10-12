@@ -17,7 +17,7 @@
             padding: 0;
         }
 
-        /* Navigation Styling (Google Calendar Style) */
+        /* Week Navigation Styling (Buttons + Month Display) */
         .week-navigation {
             display: flex;
             justify-content: center;
@@ -26,19 +26,40 @@
             font-size: 18px;
             font-weight: bold;
             color: #5f6368;
+            position: relative;
         }
 
         .nav-arrow {
             cursor: pointer;
-            margin-right: 10px;
             font-size: 24px;
             color: #5f6368;
+            position: absolute;
+            left: 20px; /* Align the previous button */
+            top: 50%;
+            transform: translateY(-50%);
         }
 
+        .nav-arrow.right {
+            left: 60px; /* Position the next button next to the prev */
+        }
+
+        /* Ensure the hover effect doesn't shift content */
         .nav-arrow:hover {
             background-color: #eee;
             border-radius: 50%;
             padding: 5px;
+        }
+
+        /* Prevent content shifting on hover by using fixed padding */
+        .nav-arrow {
+            padding: 5px;
+        }
+
+        /* Month and Year Text */
+        #currentWeek {
+            margin-left: 80px; /* Space from buttons */
+            text-align: center;
+            width: 100%;
         }
 
         /* Calendar Grid */
@@ -109,10 +130,10 @@
 </head>
 <body>
 
-<!-- Week Navigation with Buttons and Dual Month Display -->
+<!-- Week Navigation with Fixed Buttons and Month Display -->
 <div class="week-navigation">
     <span class="nav-arrow" id="prevWeek">&#x276E;</span> <!-- Left arrow -->
-    <span class="nav-arrow" id="nextWeek">&#x276F;</span> <!-- Right arrow -->
+    <span class="nav-arrow right" id="nextWeek">&#x276F;</span> <!-- Right arrow -->
     <span id="currentWeek">Oct 2024</span> <!-- Month-Year -->
 </div>
 
