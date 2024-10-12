@@ -30,52 +30,121 @@
         }
         .time-slot {
             background-color: white;
-            height: 60px; /* Simulate time blocks (1 hour per block) */
+            height: 60px;
             cursor: pointer;
         }
         .time-label {
             background-color: #f8f8f8;
             font-weight: bold;
         }
+        .navigation {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .nav-button {
+            padding: 10px;
+            margin: 0 5px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .nav-button:hover {
+            background-color: #0056b3;
+        }
     </style>
 </head>
 <body>
 
-<div class="calendar-container">
-    <!-- Time Labels Column -->
-    <div class="time-label"></div> <!-- Empty Top-Left corner -->
-    <div class="day-header">Monday</div>
-    <div class="day-header">Tuesday</div>
-    <div class="day-header">Wednesday</div>
-    <div class="day-header">Thursday</div>
-    <div class="day-header">Friday</div>
-    <div class="day-header">Saturday</div>
-    <div class="day-header">Sunday</div>
-
-    <!-- Time Rows -->
-    <!-- 9 AM Time Slot -->
-    <div class="time-label">9:00 AM</div>
-    <div class="time-slot" data-time="9:00"></div>
-    <div class="time-slot" data-time="9:00"></div>
-    <div class="time-slot" data-time="9:00"></div>
-    <div class="time-slot" data-time="9:00"></div>
-    <div class="time-slot" data-time="9:00"></div>
-    <div class="time-slot" data-time="9:00"></div>
-    <div class="time-slot" data-time="9:00"></div>
-
-    <!-- 10 AM Time Slot -->
-    <div class="time-label">10:00 AM</div>
-    <div class="time-slot" data-time="10:00"></div>
-    <div class="time-slot" data-time="10:00"></div>
-    <div class="time-slot" data-time="10:00"></div>
-    <div class="time-slot" data-time="10:00"></div>
-    <div class="time-slot" data-time="10:00"></div>
-    <div class="time-slot" data-time="10:00"></div>
-    <div class="time-slot" data-time="10:00"></div>
-
-    <!-- Repeat for other hours (11 AM, 12 PM, etc.) -->
-    <!-- You can add more rows to extend the time slots -->
+<div class="navigation">
+    <button class="nav-button" id="prevWeek">Previous Week</button>
+    <span id="currentWeek"></span>
+    <button class="nav-button" id="nextWeek">Next Week</button>
 </div>
+
+<div class="calendar-container" id="calendarContainer">
+    <!-- Day Headers and Time Slots will be dynamically generated -->
+</div>
+
+<script>
+    const calendarContainer = document.getElementById('calendarContainer');
+    const currentWeekLabel = document.getElementById('currentWeek');
+    let currentDate = new Date(); // Start with the current date
+
+    // Function to generate time slots
+    function generateTimeSlots() {
+        calendarContainer.innerHTML = ''; // Clear previous calendar content
+
+        // Day Headers
+        const startOfWeek = getStartOfWeek(currentDate);
+        for (let i = 0; i < 8; i++) {
+            if (i === 0) {
+                let emptyCell = document.createElement('div');
+                emptyCell.className = 'time-label';
+                calendarContainer.appendChild(emptyCell); // Empty top-left corner
+            } else {
+                let dayHeader = document.createElement('div');
+                dayHeader.className = 'day-header';
+                const dayDate = new Date(startOfWeek);
+                dayDate.setDate(startOfWeek.getDate() + (i - 1));
+                dayHeader.textContent = `${dayDate.toDateString()}`; // Display actual date
+                calendarContainer.appendChild(dayHeader);
+            }
+        }
+
+        // Time slots for each day
+        for (let hour = 0; hour < 24; hour++) {
+            let timeLabel = document.createElement('div');
+            timeLabel.className = 'time-label';
+            timeLabel.textContent = formatTime(hour);
+            calendarContainer.appendChild(timeLabel);
+
+            for (let day = 0; day < 7; day++) {
+                let timeSlot = document.createElement('div');
+                timeSlot.className = 'time-slot';
+                timeSlot.setAttribute('data-hour', hour);
+                timeSlot.setAttribute('data-day', day);
+                calendarContainer.appendChild(timeSlot);
+            }
+        }
+
+        // Update the current week label
+        const weekStart = startOfWeek.toDateString();
+        const weekEnd = new Date(startOfWeek);
+        weekEnd.setDate(startOfWeek.getDate() + 6);
+        currentWeekLabel.textContent = `Week: ${weekStart} - ${weekEnd.toDateString()}`;
+    }
+
+    // Helper function to get the start of the current week (Sunday)
+    function getStartOfWeek(date) {
+        const start = new Date(date);
+        const day = start.getDay();
+        const diff = start.getDate() - day + (day === 0 ? 0 : 0); // Adjust to Sunday
+        start.setDate(diff);
+        return start;
+    }
+
+    // Helper function to format time in AM/PM format
+    function formatTime(hour) {
+        const period = hour >= 12 ? 'PM' : 'AM';
+        const displayHour = hour % 12 === 0 ? 12 : hour % 12;
+        return `${displayHour}:00 ${period}`;
+    }
+
+    // Event listeners for Previous and Next Week buttons
+    document.getElementById('prevWeek').addEventListener('click', () => {
+        currentDate.setDate(currentDate.getDate() - 7); // Go back 7 days
+        generateTimeSlots();
+    });
+
+    document.getElementById('nextWeek').addEventListener('click', () => {
+        currentDate.setDate(currentDate.getDate() + 7); // Go forward 7 days
+        generateTimeSlots();
+    });
+
+    // Initialize the calendar for the current week
+    generateTimeSlots();
+</script>
 
 </body>
 </html>
