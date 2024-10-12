@@ -63,61 +63,59 @@
         }
 
         .time-label, .day-header, .time-slot {
-            padding: 5px;
+            padding: 0; /* Remove padding for cleaner alignment */
             border-bottom: 1px solid #ddd; /* Single bottom border */
             border-right: 1px solid #ddd; /* Single right border */
             text-align: center;
         }
-        
-        /* Day header background */
-        .day-header {
-            background-color: #f8f9fa;
-            font-weight: 600;
-            color: #4a4a4a;
-            font-size: 14px;
-        }
-        
-        /* Date styling */
-        .day-date {
-            font-size: 20px;
-            color: black;
-            font-weight: 400;
-            margin-top: 5px;
-        }
-        
-        /* Time labels on the left */
+
+        /* Align time label to the center and next to the separating line */
         .time-label {
-            background-color: #f1f3f5;
             font-weight: bold;
             font-size: 12px;
             color: #5f6368;
             text-align: right;
-            white-space: nowrap; /* Ensure single-line time display */
+            line-height: 40px; /* Aligns the time text to the time slot line */
+            border-right: none; /* Remove the right border for time column */
+            background-color: transparent; /* Remove background */
         }
-        
+
         /* Time slot appearance */
         .time-slot {
             background-color: white;
-            height: 40px;
+            height: 40px; /* Height of the time slot */
             cursor: pointer;
             transition: background-color 0.3s ease, box-shadow 0.3s ease;
         }
-        
+
         .time-slot:hover {
             background-color: #e0e7ff;
             box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
             border-radius: 4px;
         }
-        
-        /* Remove border-right from the last column and bottom from the last row */
-        .day-header:last-child, .time-slot:nth-child(7n + 7) {
-            border-right: none;
-        }
-        
-        .time-slot:last-of-type {
-            border-bottom: none;
+
+        /* Day headers styling */
+        .day-header {
+            background-color: #f8f9fa;
+            font-weight: 600;
+            color: #4a4a4a;
+            font-size: 14px;
+            border-right: 1px solid #ddd; /* Keep the border between days */
+            text-align: center;
         }
 
+        .day-header:first-child {
+            border-top-left-radius: 8px;
+        }
+
+        .day-header:last-child {
+            border-top-right-radius: 8px;
+        }
+
+        /* Remove right border from last column */
+        .day-header:last-child, .time-slot:nth-child(7n+7) {
+            border-right: none;
+        }
     </style>
 </head>
 <body>
