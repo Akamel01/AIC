@@ -20,19 +20,19 @@
         /* Week Navigation Styling */
         .week-navigation {
             display: flex;
+            justify-content: center;
             align-items: center;
             margin-bottom: 10px;
         }
 
-        .week-navigation .nav-arrow {
+        .nav-arrow {
             cursor: pointer;
             font-size: 24px;
             color: #5f6368;
             margin-right: 10px;
-            position: relative;
         }
 
-        .week-navigation .nav-arrow:hover {
+        .nav-arrow:hover {
             background-color: #eee;
             border-radius: 50%;
             padding: 5px;
@@ -136,10 +136,8 @@
 
 <!-- Week Navigation and Month-Year Text -->
 <div class="week-navigation">
-    <div class="nav-arrows">
-        <span class="nav-arrow" id="prevWeek">&#x276E;</span> <!-- Left arrow -->
-        <span class="nav-arrow" id="nextWeek">&#x276F;</span> <!-- Right arrow -->
-    </div>
+    <span class="nav-arrow" id="prevWeek">&#x276E;</span> <!-- Left arrow -->
+    <span class="nav-arrow" id="nextWeek">&#x276F;</span> <!-- Right arrow -->
     <span id="currentWeek">Oct 2024</span> <!-- Month-Year -->
 </div>
 
