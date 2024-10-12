@@ -31,12 +31,13 @@
             font-size: 24px;
             color: #5f6368;
             margin-right: 10px;
+            padding: 5px; /* Set padding for the button to avoid shifting */
         }
-
+        
         .nav-arrow:hover {
             background-color: #eee;
             border-radius: 50%;
-            padding: 5px;
+            /* Keep the padding the same */
         }
 
         /* Month-Year styling, starts after the next button */
@@ -50,9 +51,9 @@
         /* Calendar Grid */
         .calendar-container {
             display: grid;
-            grid-template-columns: 70px repeat(7, 1fr); /* Increased width for time column */
+            grid-template-columns: 50px repeat(7, 1fr); /* 50px for time column, 1fr for each day */
             gap: 1px;
-            max-width: 1000px;
+            width: 100%; /* Make it fill the entire width */
             margin: 0 auto;
             border: 1px solid #ccc;
             background-color: white;
