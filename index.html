@@ -106,7 +106,7 @@
 <!-- Month and Year Navigation -->
 <div class="month-navigation">
     <span class="nav-arrow" id="prevMonth">&#x276E;</span> <!-- Left arrow -->
-    <span id="currentMonth">October 2024</span> <!-- Month-Year -->
+    <span id="currentMonth">Oct 2024</span> <!-- Month-Year -->
     <span class="nav-arrow" id="nextMonth">&#x276F;</span> <!-- Right arrow -->
 </div>
 
@@ -126,6 +126,8 @@
         // Generate day headers with dates
         const startOfWeek = getStartOfWeek(currentDate);
         const daysOfWeek = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
+        let firstMonth = null;
+        let secondMonth = null;
 
         // Empty top-left corner for the time column
         calendarContainer.appendChild(document.createElement('div'));
@@ -135,6 +137,15 @@
             dayHeader.className = 'day-header';
             const dayDate = new Date(startOfWeek);
             dayDate.setDate(startOfWeek.getDate() + i);
+
+            // Track the month
+            const month = dayDate.getMonth();
+            if (firstMonth === null) {
+                firstMonth = month;
+            } else if (month !== firstMonth && secondMonth === null) {
+                secondMonth = month;
+            }
+
             dayHeader.innerHTML = `<div>${daysOfWeek[i]}</div><div class="day-date">${dayDate.getDate()}</div>`;
             calendarContainer.appendChild(dayHeader);
         }
@@ -156,9 +167,10 @@
             }
         }
 
-        // Update the current month label
-        const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-        currentMonthLabel.textContent = `${monthNames[currentDate.getMonth()]} ${currentDate.getFullYear()}`;
+        // Update the current month label based on whether the week spans two months
+        const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+        const displayMonth = secondMonth === null ? `${monthNames[firstMonth]} ${currentDate.getFullYear()}` : `${monthNames[firstMonth]} – ${monthNames[secondMonth]} ${currentDate.getFullYear()}`;
+        currentMonthLabel.textContent = displayMonth;
     }
 
     // Helper function to get the start of the current week (Sunday)
