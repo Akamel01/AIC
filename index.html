@@ -63,12 +63,13 @@
         }
 
         .time-label, .day-header, .time-slot {
-            padding: 0; /* Remove padding for cleaner alignment */
+            padding: 0;
             border-bottom: 1px solid #ddd; /* Single bottom border */
             border-right: 1px solid #ddd; /* Single right border */
             text-align: center;
+            box-sizing: border-box; /* Ensure borders don't collapse */
         }
-
+        
         /* Align time label to the center and next to the separating line */
         .time-label {
             font-weight: bold;
@@ -77,44 +78,43 @@
             text-align: right;
             line-height: 40px; /* Aligns the time text to the time slot line */
             border-right: none; /* Remove the right border for time column */
-            background-color: transparent; /* Remove background */
+            background-color: transparent;
         }
-
+        
         /* Time slot appearance */
         .time-slot {
             background-color: white;
-            height: 40px; /* Height of the time slot */
+            height: 40px;
             cursor: pointer;
             transition: background-color 0.3s ease, box-shadow 0.3s ease;
+            box-sizing: border-box; /* Ensure borders are consistent */
         }
-
+        
         .time-slot:hover {
             background-color: #e0e7ff;
             box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
             border-radius: 4px;
         }
-
+        
         /* Day headers styling */
         .day-header {
             background-color: #f8f9fa;
             font-weight: 600;
             color: #4a4a4a;
             font-size: 14px;
-            border-right: 1px solid #ddd; /* Keep the border between days */
+            border-right: 1px solid #ddd;
             text-align: center;
+            box-sizing: border-box; /* Ensure borders are uniform */
         }
-
-        .day-header:first-child {
-            border-top-left-radius: 8px;
-        }
-
-        .day-header:last-child {
-            border-top-right-radius: 8px;
-        }
-
+        
         /* Remove right border from last column */
         .day-header:last-child, .time-slot:nth-child(7n+7) {
             border-right: none;
+        }
+        
+        /* Remove bottom border from the last time slot in the grid */
+        .time-slot:last-of-type {
+            border-bottom: none;
         }
     </style>
 </head>
