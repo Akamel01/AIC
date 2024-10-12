@@ -7,13 +7,29 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
             background-color: #f4f4f9;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
+            flex-direction: column;
+        }
+        .calendar {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 5px;
+            margin-bottom: 20px;
+        }
+        .day {
+            background-color: #fff;
+            padding: 10px;
+            border: 1px solid #ccc;
+            text-align: center;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .day:hover {
+            background-color: #e6e6e6;
         }
         .container {
             background-color: white;
@@ -23,8 +39,6 @@
             width: 350px;
         }
         h1 {
-            font-size: 24px;
-            margin-bottom: 20px;
             text-align: center;
         }
         form input, form select, form button {
@@ -34,83 +48,34 @@
             border: 1px solid #ccc;
             border-radius: 4px;
         }
-        form button {
-            background-color: #28a745;
-            color: white;
-            border: none;
-            cursor: pointer;
-        }
-        form button:hover {
-            background-color: #218838;
-        }
-        #taskList {
-            margin-top: 20px;
-        }
-        .category-business {
-            background-color: #f0f8ff;
-        }
-        .category-selfcare {
-            background-color: #ffe4e1;
-        }
-        .category-social {
-            background-color: #f5f5dc;
-        }
-        .category-spiritual {
-            background-color: #e6e6fa;
-        }
-        .importance-high {
-            color: red;
-        }
-        .importance-medium {
-            color: orange;
-        }
-        .importance-low {
-            color: green;
-        }
     </style>
 </head>
 <body>
+    <div class="calendar" id="calendar">
+        <!-- Calendar days will be dynamically generated here -->
+    </div>
+    
     <div class="container">
         <h1>AI Calendar</h1>
         <form id="taskForm">
             <input type="text" id="taskName" placeholder="Task Name" required>
-
-            <label for="taskCategory">Task Category</label>
             <select id="taskCategory" required>
                 <optgroup label="Business">
-                    <option value="COQ" class="category-business">COQ</option>
-                    <option value="UBC RA" class="category-business">UBC RA</option>
-                    <option value="UBC TA" class="category-business">UBC TA</option>
-                    <option value="Self-development" class="category-business">Self-development</option>
-                    <option value="Personal Business" class="category-business">Personal Business</option>
+                    <option value="COQ">COQ</option>
+                    <option value="UBC RA">UBC RA</option>
+                    <option value="UBC TA">UBC TA</option>
+                    <option value="Self-development">Self-development</option>
+                    <option value="Personal Business">Personal Business</option>
                 </optgroup>
-                <optgroup label="Self-care">
-                    <option value="Physical Health" class="category-selfcare">Physical Health</option>
-                    <option value="Cleaning" class="category-selfcare">Cleaning</option>
-                    <option value="Cooking" class="category-selfcare">Cooking</option>
-                </optgroup>
-                <optgroup label="Social">
-                    <option value="Friends" class="category-social">Friends</option>
-                    <option value="Family" class="category-social">Family</option>
-                    <option value="Career" class="category-social">Career</option>
-                    <option value="Partner" class="category-social">Partner</option>
-                </optgroup>
-                <optgroup label="Spiritual">
-                    <option value="Pray" class="category-spiritual">Pray</option>
-                    <option value="Quran" class="category-spiritual">Quran</option>
-                    <option value="Lessons" class="category-spiritual">Lessons</option>
-                </optgroup>
+                <!-- More categories here -->
             </select>
-
-            <input type="datetime-local" id="taskDeadline" required>
 
             <input type="number" id="taskTime" placeholder="Expected Time to Finish (in hours)" required>
 
-            <label for="taskImportance">Importance</label>
             <select id="taskImportance" required>
-                <option value="High" class="importance-high">High</option>
-                <option value="Medium" class="importance-medium">Medium</option>
-                <option value="Low" class="importance-low">Low</option>
+                <option value="High">High</option>
+                <option value="Medium">Medium</option>
+                <option value="Low">Low</option>
             </select>
 
             <button type="submit">Add Task</button>
@@ -119,44 +84,36 @@
     </div>
 
     <script>
-        document.getElementById('taskForm').addEventListener('submit', function(event) {
-            event.preventDefault();
+        const calendarElement = document.getElementById('calendar');
 
-            const taskName = document.getElementById('taskName').value;
-            const taskCategory = document.getElementById('taskCategory').value;
-            const taskDeadline = document.getElementById('taskDeadline').value;
-            const taskTime = document.getElementById('taskTime').value;
-            const taskImportance = document.getElementById('taskImportance').value;
+        // Create a simple calendar for the current month
+        function createCalendar() {
+            const today = new Date();
+            const currentMonth = today.getMonth();
+            const currentYear = today.getFullYear();
 
-            if (taskName && taskCategory && taskDeadline && taskTime && taskImportance) {
-                const taskList = document.getElementById('taskList');
-                const newTask = document.createElement('div');
-                newTask.textContent = `Task: ${taskName}, Category: ${taskCategory}, Deadline: ${new Date(taskDeadline).toLocaleString()}, Time: ${taskTime} hrs, Importance: ${taskImportance}`;
+            const firstDay = new Date(currentYear, currentMonth, 1).getDay();
+            const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
 
-                // Apply color themes based on category and importance
-                if (taskCategory.includes("Business")) {
-                    newTask.classList.add('category-business');
-                } else if (taskCategory.includes("Self-care")) {
-                    newTask.classList.add('category-selfcare');
-                } else if (taskCategory.includes("Social")) {
-                    newTask.classList.add('category-social');
-                } else if (taskCategory.includes("Spiritual")) {
-                    newTask.classList.add('category-spiritual');
-                }
-
-                if (taskImportance === "High") {
-                    newTask.classList.add('importance-high');
-                } else if (taskImportance === "Medium") {
-                    newTask.classList.add('importance-medium');
-                } else if (taskImportance === "Low") {
-                    newTask.classList.add('importance-low');
-                }
-
-                taskList.appendChild(newTask);
-                
-                document.getElementById('taskForm').reset();
+            for (let i = 0; i < firstDay; i++) {
+                const emptyCell = document.createElement('div');
+                calendarElement.appendChild(emptyCell);
             }
-        });
+
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dayElement = document.createElement('div');
+                dayElement.classList.add('day');
+                dayElement.textContent = day;
+                dayElement.addEventListener('click', () => selectDay(day));
+                calendarElement.appendChild(dayElement);
+            }
+        }
+
+        function selectDay(day) {
+            alert(`You selected day ${day}. Add a task for this day.`);
+        }
+
+        createCalendar();
     </script>
 </body>
 </html>
