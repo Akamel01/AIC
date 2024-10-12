@@ -7,50 +7,70 @@
     <style>
         body {
             font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
             margin: 0;
             padding: 0;
-            background-color: #f4f4f9;
+        }
+        .navigation {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 16px;
+        }
+        .nav-button {
+            padding: 10px 15px;
+            margin: 0 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            border-radius: 4px;
+        }
+        .nav-button:hover {
+            background-color: #0056b3;
+        }
+        #currentWeek {
+            font-size: 18px;
+            font-weight: bold;
         }
         .calendar-container {
             display: grid;
-            grid-template-columns: repeat(8, 1fr); /* 7 days + 1 for the time column */
+            grid-template-columns: 60px repeat(7, 1fr); /* 1 column for time, 7 for days */
             gap: 1px;
             max-width: 1000px;
-            margin: 20px auto;
-        }
-        .time-slot, .day-header {
-            background-color: #ddd;
-            padding: 10px;
-            text-align: center;
+            margin: 0 auto;
             border: 1px solid #ccc;
         }
+        .time-label, .day-header, .time-slot {
+            padding: 10px;
+            border: 1px solid #eee;
+            text-align: center;
+        }
         .day-header {
-            background-color: #f0f0f0;
+            background-color: white;
+            font-weight: 600;
+            color: #5f6368;
+            font-size: 14px;
+        }
+        .day-date {
+            font-size: 22px;
+            color: black;
+            font-weight: 400;
+        }
+        .time-label {
+            background-color: #f8f8f8;
             font-weight: bold;
+            font-size: 12px;
+            color: #5f6368;
+            text-align: right;
         }
         .time-slot {
             background-color: white;
             height: 60px;
             cursor: pointer;
         }
-        .time-label {
-            background-color: #f8f8f8;
-            font-weight: bold;
-        }
-        .navigation {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        .nav-button {
-            padding: 10px;
-            margin: 0 5px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            cursor: pointer;
-        }
-        .nav-button:hover {
-            background-color: #0056b3;
+        .time-slot:hover {
+            background-color: #f0f0f0;
         }
     </style>
 </head>
@@ -63,37 +83,36 @@
 </div>
 
 <div class="calendar-container" id="calendarContainer">
-    <!-- Day Headers and Time Slots will be dynamically generated -->
+    <!-- Calendar will be dynamically generated -->
 </div>
 
 <script>
     const calendarContainer = document.getElementById('calendarContainer');
     const currentWeekLabel = document.getElementById('currentWeek');
-    let currentDate = new Date(); // Start with the current date
+    let currentDate = new Date();
 
-    // Function to generate time slots
     function generateTimeSlots() {
-        calendarContainer.innerHTML = ''; // Clear previous calendar content
+        calendarContainer.innerHTML = ''; // Clear previous content
 
-        // Day Headers
+        // Generate day headers with dates
         const startOfWeek = getStartOfWeek(currentDate);
-        for (let i = 0; i < 8; i++) {
-            if (i === 0) {
-                let emptyCell = document.createElement('div');
-                emptyCell.className = 'time-label';
-                calendarContainer.appendChild(emptyCell); // Empty top-left corner
-            } else {
-                let dayHeader = document.createElement('div');
-                dayHeader.className = 'day-header';
-                const dayDate = new Date(startOfWeek);
-                dayDate.setDate(startOfWeek.getDate() + (i - 1));
-                dayHeader.textContent = `${dayDate.toDateString()}`; // Display actual date
-                calendarContainer.appendChild(dayHeader);
-            }
+        const daysOfWeek = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
+
+        // Empty top-left corner for the time column
+        calendarContainer.appendChild(document.createElement('div'));
+
+        for (let i = 0; i < 7; i++) {
+            const dayHeader = document.createElement('div');
+            dayHeader.className = 'day-header';
+            const dayDate = new Date(startOfWeek);
+            dayDate.setDate(startOfWeek.getDate() + i);
+            dayHeader.innerHTML = `<div>${daysOfWeek[i]}</div><div class="day-date">${dayDate.getDate()}</div>`;
+            calendarContainer.appendChild(dayHeader);
         }
 
-        // Time slots for each day
+        // Time slots
         for (let hour = 0; hour < 24; hour++) {
+            // Time labels for the left column
             let timeLabel = document.createElement('div');
             timeLabel.className = 'time-label';
             timeLabel.textContent = formatTime(hour);
@@ -115,34 +134,34 @@
         currentWeekLabel.textContent = `Week: ${weekStart} - ${weekEnd.toDateString()}`;
     }
 
-    // Helper function to get the start of the current week (Sunday)
+    // Get the start of the current week (Sunday)
     function getStartOfWeek(date) {
         const start = new Date(date);
         const day = start.getDay();
-        const diff = start.getDate() - day + (day === 0 ? 0 : 0); // Adjust to Sunday
+        const diff = start.getDate() - day;
         start.setDate(diff);
         return start;
     }
 
-    // Helper function to format time in AM/PM format
+    // Helper function to format time
     function formatTime(hour) {
         const period = hour >= 12 ? 'PM' : 'AM';
         const displayHour = hour % 12 === 0 ? 12 : hour % 12;
         return `${displayHour}:00 ${period}`;
     }
 
-    // Event listeners for Previous and Next Week buttons
+    // Event listeners for navigating weeks
     document.getElementById('prevWeek').addEventListener('click', () => {
-        currentDate.setDate(currentDate.getDate() - 7); // Go back 7 days
+        currentDate.setDate(currentDate.getDate() - 7);
         generateTimeSlots();
     });
 
     document.getElementById('nextWeek').addEventListener('click', () => {
-        currentDate.setDate(currentDate.getDate() + 7); // Go forward 7 days
+        currentDate.setDate(currentDate.getDate() + 7);
         generateTimeSlots();
     });
 
-    // Initialize the calendar for the current week
+    // Initialize the calendar
     generateTimeSlots();
 </script>
 
