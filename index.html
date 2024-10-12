@@ -7,113 +7,75 @@
     <style>
         body {
             font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
             background-color: #f4f4f9;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            flex-direction: column;
         }
-        .calendar {
+        .calendar-container {
             display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            gap: 5px;
-            margin-bottom: 20px;
+            grid-template-columns: repeat(8, 1fr); /* 7 days + 1 for the time column */
+            gap: 1px;
+            max-width: 1000px;
+            margin: 20px auto;
         }
-        .day {
-            background-color: #fff;
+        .time-slot, .day-header {
+            background-color: #ddd;
             padding: 10px;
-            border: 1px solid #ccc;
             text-align: center;
-            cursor: pointer;
-            transition: background-color 0.3s;
+            border: 1px solid #ccc;
         }
-        .day:hover {
-            background-color: #e6e6e6;
+        .day-header {
+            background-color: #f0f0f0;
+            font-weight: bold;
         }
-        .container {
+        .time-slot {
             background-color: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            width: 350px;
+            height: 60px; /* Simulate time blocks (1 hour per block) */
+            cursor: pointer;
         }
-        h1 {
-            text-align: center;
-        }
-        form input, form select, form button {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
+        .time-label {
+            background-color: #f8f8f8;
+            font-weight: bold;
         }
     </style>
 </head>
 <body>
-    <div class="calendar" id="calendar">
-        <!-- Calendar days will be dynamically generated here -->
-    </div>
-    
-    <div class="container">
-        <h1>AI Calendar</h1>
-        <form id="taskForm">
-            <input type="text" id="taskName" placeholder="Task Name" required>
-            <select id="taskCategory" required>
-                <optgroup label="Business">
-                    <option value="COQ">COQ</option>
-                    <option value="UBC RA">UBC RA</option>
-                    <option value="UBC TA">UBC TA</option>
-                    <option value="Self-development">Self-development</option>
-                    <option value="Personal Business">Personal Business</option>
-                </optgroup>
-                <!-- More categories here -->
-            </select>
 
-            <input type="number" id="taskTime" placeholder="Expected Time to Finish (in hours)" required>
+<div class="calendar-container">
+    <!-- Time Labels Column -->
+    <div class="time-label"></div> <!-- Empty Top-Left corner -->
+    <div class="day-header">Monday</div>
+    <div class="day-header">Tuesday</div>
+    <div class="day-header">Wednesday</div>
+    <div class="day-header">Thursday</div>
+    <div class="day-header">Friday</div>
+    <div class="day-header">Saturday</div>
+    <div class="day-header">Sunday</div>
 
-            <select id="taskImportance" required>
-                <option value="High">High</option>
-                <option value="Medium">Medium</option>
-                <option value="Low">Low</option>
-            </select>
+    <!-- Time Rows -->
+    <!-- 9 AM Time Slot -->
+    <div class="time-label">9:00 AM</div>
+    <div class="time-slot" data-time="9:00"></div>
+    <div class="time-slot" data-time="9:00"></div>
+    <div class="time-slot" data-time="9:00"></div>
+    <div class="time-slot" data-time="9:00"></div>
+    <div class="time-slot" data-time="9:00"></div>
+    <div class="time-slot" data-time="9:00"></div>
+    <div class="time-slot" data-time="9:00"></div>
 
-            <button type="submit">Add Task</button>
-        </form>
-        <div id="taskList"></div>
-    </div>
+    <!-- 10 AM Time Slot -->
+    <div class="time-label">10:00 AM</div>
+    <div class="time-slot" data-time="10:00"></div>
+    <div class="time-slot" data-time="10:00"></div>
+    <div class="time-slot" data-time="10:00"></div>
+    <div class="time-slot" data-time="10:00"></div>
+    <div class="time-slot" data-time="10:00"></div>
+    <div class="time-slot" data-time="10:00"></div>
+    <div class="time-slot" data-time="10:00"></div>
 
-    <script>
-        const calendarElement = document.getElementById('calendar');
+    <!-- Repeat for other hours (11 AM, 12 PM, etc.) -->
+    <!-- You can add more rows to extend the time slots -->
+</div>
 
-        // Create a simple calendar for the current month
-        function createCalendar() {
-            const today = new Date();
-            const currentMonth = today.getMonth();
-            const currentYear = today.getFullYear();
-
-            const firstDay = new Date(currentYear, currentMonth, 1).getDay();
-            const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
-
-            for (let i = 0; i < firstDay; i++) {
-                const emptyCell = document.createElement('div');
-                calendarElement.appendChild(emptyCell);
-            }
-
-            for (let day = 1; day <= daysInMonth; day++) {
-                const dayElement = document.createElement('div');
-                dayElement.classList.add('day');
-                dayElement.textContent = day;
-                dayElement.addEventListener('click', () => selectDay(day));
-                calendarElement.appendChild(dayElement);
-            }
-        }
-
-        function selectDay(day) {
-            alert(`You selected day ${day}. Add a task for this day.`);
-        }
-
-        createCalendar();
-    </script>
 </body>
 </html>
