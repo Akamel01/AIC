@@ -9,7 +9,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
 
     <style>
-        /* Font and General Styling */
         body {
             font-family: 'Roboto', sans-serif;
             background-color: #f9fafc;
@@ -23,7 +22,7 @@
             align-items: center;
             margin-bottom: 10px;
             position: relative;
-            left: 70px; /* Aligns the navigation to be above the first column */
+            left: 70px;
         }
 
         .nav-arrow {
@@ -31,30 +30,28 @@
             font-size: 24px;
             color: #5f6368;
             margin-right: 10px;
-            padding: 5px; /* Set padding for the button to avoid shifting */
+            padding: 5px;
         }
         
         .nav-arrow:hover {
             background-color: #eee;
             border-radius: 50%;
-            /* Keep the padding the same */
         }
 
-        /* Month-Year styling, starts after the next button */
         #currentWeek {
             font-size: 18px;
             font-weight: bold;
             color: #5f6368;
-            margin-left: 10px; /* Space after the next button */
+            margin-left: 10px;
         }
 
         /* Calendar Grid */
         .calendar-container {
             display: grid;
-            grid-template-columns: 60px repeat(7, 1fr); /* Slightly wider time column */
-            gap: 0; /* No gap between grid cells */
-            width: 90%; /* Make it fill most of the width but allow for margins */
-            margin: 0 auto; /* Centers the calendar horizontally */
+            grid-template-columns: 60px repeat(7, 1fr);
+            gap: 0;
+            width: 90%;
+            margin: 0 auto;
             border: 1px solid #ccc;
             background-color: white;
             border-radius: 8px;
@@ -64,29 +61,27 @@
 
         .time-label, .day-header, .time-slot {
             padding: 0;
-            border-bottom: 1px solid #ddd; /* Single bottom border */
             text-align: center;
         }
 
-        /* Time label styling - align it with the row's bottom border */
         .time-label {
             font-weight: bold;
             font-size: 12px;
             color: #5f6368;
             text-align: right;
             padding-right: 10px;
-            border-right: none; /* Remove the right border in the time column */
-            height: 40px; /* Aligns with the time slot height */
-            line-height: 40px; /* Aligns the text with the bottom of the cell */
+            height: 40px;
+            position: relative;
+            top: -7px;
             background-color: transparent;
         }
 
-        /* Time slot appearance */
         .time-slot {
             background-color: white;
-            height: 40px; /* Height of the time slot */
+            height: 40px;
             cursor: pointer;
             transition: background-color 0.3s ease, box-shadow 0.3s ease;
+            border-bottom: 1px solid #ddd;
         }
 
         .time-slot:hover {
@@ -113,10 +108,88 @@
             border-top-right-radius: 8px;
         }
 
-        /* Remove right border from last column */
         .day-header:last-child, .time-slot:nth-child(7n+7) {
             border-right: none;
         }
+
+        /* Modal styling */
+        #taskModal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+
+        .modal-content {
+            background-color: #fff;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 500px; /* Adjusted for wider layout */
+            border-radius: 8px;
+        }
+
+        .modal-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+
+        .modal-column {
+            flex: 1;
+            margin-right: 10px;
+        }
+
+        .modal-column:last-child {
+            margin-right: 0;
+        }
+
+        .subcategories {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
+
+        .modal-content input,
+        .modal-content select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+
+        .modal-content button {
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        .modal-content button:hover {
+            background-color: #45a049;
+        }
+
+        .task {
+            padding: 5px;
+            border-radius: 5px;
+            margin: 2px 0;
+        }
+
+        /* Task category color themes */
+        .business { background-color: #ffcc80; }
+        .self-care { background-color: #90caf9; }
+        .social { background-color: #b39ddb; }
+        .spiritual { background-color: #a5d6a7; }
+
+        /* Importance outline color */
+        .high-importance { border: 2px solid red; }
+        .medium-importance { border: 2px solid orange; }
+        .low-importance { border: 2px solid green; }
 
     </style>
 </head>
@@ -124,99 +197,191 @@
 
 <!-- Week Navigation and Month-Year Text -->
 <div class="week-navigation">
-    <span class="nav-arrow" id="prevWeek">&#x276E;</span> <!-- Left arrow -->
-    <span class="nav-arrow" id="nextWeek">&#x276F;</span> <!-- Right arrow -->
-    <span id="currentWeek">Oct 2024</span> <!-- Month-Year -->
+    <span class="nav-arrow" id="prevWeek">&#x276E;</span>
+    <span class="nav-arrow" id="nextWeek">&#x276F;</span>
+    <span id="currentWeek">Oct 2024</span>
 </div>
 
 <div class="calendar-container" id="calendarContainer">
     <!-- Calendar will be dynamically generated -->
 </div>
 
+<!-- Task Modal -->
+<div id="taskModal">
+    <div class="modal-content">
+        <h3>Add Task</h3>
+
+        <div class="modal-row">
+            <!-- Task Title -->
+            <div class="modal-column">
+                <label for="taskTitle">Task Title:</label>
+                <input type="text" id="taskTitle" placeholder="Task Title" required>
+            </div>
+
+            <!-- Category and Sub-category Selection -->
+            <div class="modal-column">
+                <label for="taskCategory">Category:</label>
+                <div id="categoryMap">
+                    <div class="category-row">
+                        <div class="category-block" data-category="business">Business</div>
+                        <div class="subcategories" data-category="business" style="display: none;">
+                            <button data-subcategory="COQ">COQ</button>
+                            <button data-subcategory="UBC RA">UBC RA</button>
+                            <button data-subcategory="UBC TA">UBC TA</button>
+                            <button data-subcategory="Self-development">Self-development</button>
+                            <button data-subcategory="Personal Business">Personal Business</button>
+                        </div>
+                    </div>
+
+                    <div class="category-row">
+                        <div class="category-block" data-category="self-care">Self-care</div>
+                        <div class="subcategories" data-category="self-care" style="display: none;">
+                            <button data-subcategory="Physical Health">Physical Health</button>
+                            <button data-subcategory="Cleaning">Cleaning</button>
+                            <button data-subcategory="Cooking">Cooking</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-row">
+            <!-- Importance Bar -->
+            <div class="modal-column">
+                <label for="taskImportance">Importance:</label>
+                <div id="importanceBar">
+                    <input type="range" id="taskImportance" min="1" max="3" value="2">
+                    <span id="importanceLabel">Medium</span>
+                </div>
+            </div>
+
+            <!-- Start and End Time -->
+            <div class="modal-column">
+                <label for="taskStartTime">Start Time:</label>
+                <input type="time" id="taskStartTime" required>
+                <label for="taskEndTime">End Time:</label>
+                <input type="time" id="taskEndTime" required>
+            </div>
+        </div>
+
+        <button id="addTaskBtn">Add Task</button>
+    </div>
+</div>
+
 <script>
     const calendarContainer = document.getElementById('calendarContainer');
     const currentWeekLabel = document.getElementById('currentWeek');
+    const taskModal = document.getElementById('taskModal');
+    const taskTitleInput = document.getElementById('taskTitle');
+    const addTaskBtn = document.getElementById('addTaskBtn');
     let currentDate = new Date();
+    let activeSlot = null;
 
     // Function to generate the calendar
     function generateTimeSlots() {
         calendarContainer.innerHTML = ''; // Clear previous content
 
-        // Generate day headers with dates
         const startOfWeek = getStartOfWeek(currentDate);
         const daysOfWeek = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
-        let firstMonth = null;
-        let secondMonth = null;
 
-        // Empty top-left corner for the time column
-        calendarContainer.appendChild(document.createElement('div'));
-
+        calendarContainer.appendChild(document.createElement('div')); // Top-left corner
         for (let i = 0; i < 7; i++) {
             const dayHeader = document.createElement('div');
             dayHeader.className = 'day-header';
             const dayDate = new Date(startOfWeek);
             dayDate.setDate(startOfWeek.getDate() + i);
-
-            // Track the month
-            const month = dayDate.getMonth();
-            if (firstMonth === null) {
-                firstMonth = month;
-            } else if (month !== firstMonth && secondMonth === null) {
-                secondMonth = month;
-            }
-
             dayHeader.innerHTML = `<div>${daysOfWeek[i]}</div><div class="day-date">${dayDate.getDate()}</div>`;
             calendarContainer.appendChild(dayHeader);
         }
 
-        // Generate time slots for the entire day
         for (let hour = 0; hour < 24; hour++) {
-            // Time labels for the left column
             let timeLabel = document.createElement('div');
             timeLabel.className = 'time-label';
-            timeLabel.textContent = formatTime(hour); // Modified formatTime function
+            timeLabel.textContent = formatTime(hour);
             calendarContainer.appendChild(timeLabel);
 
             for (let day = 0; day < 7; day++) {
                 let timeSlot = document.createElement('div');
                 timeSlot.className = 'time-slot';
                 timeSlot.setAttribute('data-hour', hour);
-                timeSlot.setAttribute('data-day', day);
+                timeSlot.addEventListener('click', () => openTaskModal(timeSlot));
                 calendarContainer.appendChild(timeSlot);
             }
         }
-
-        // Update the current week label based on whether the week spans two months
-        const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-        const displayMonth = secondMonth === null ? `${monthNames[firstMonth]} ${currentDate.getFullYear()}` : `${monthNames[firstMonth]} – ${monthNames[secondMonth]} ${currentDate.getFullYear()}`;
-        currentWeekLabel.textContent = displayMonth;
     }
 
-    // Helper function to get the start of the current week (Sunday)
+    // Get start of the current week (Sunday)
     function getStartOfWeek(date) {
         const start = new Date(date);
         const day = start.getDay();
-        const diff = start.getDate() - day;
-        start.setDate(diff);
+        start.setDate(start.getDate() - day);
         return start;
     }
 
-    // Helper function to format time in AM/PM format (without :00)
+    // Format time in AM/PM
     function formatTime(hour) {
         const period = hour >= 12 ? 'PM' : 'AM';
         const displayHour = hour % 12 === 0 ? 12 : hour % 12;
-        return `${displayHour} ${period}`; // Removed :00
+        return `${displayHour} ${period}`;
     }
 
-    // Event listeners for week navigation (move by 7 days instead of months)
-    document.getElementById('prevWeek').addEventListener('click', () => {
-        currentDate.setDate(currentDate.getDate() - 7); // Move back 1 week
-        generateTimeSlots();
+    // Open task modal with start and end time pre-filled
+    function openTaskModal(slot) {
+        activeSlot = slot;
+        const startTime = slot.getAttribute('data-hour');
+        document.getElementById('taskStartTime').value = `${startTime.padStart(2, '0')}:00`; // Set default start time
+        document.getElementById('taskEndTime').value = `${(parseInt(startTime) + 1).toString().padStart(2, '0')}:00`; // Default end time +1 hour
+        taskModal.style.display = 'block';
+    }
+
+    // Add task to the selected time slot and display
+    addTaskBtn.addEventListener('click', () => {
+        const taskTitle = taskTitleInput.value;
+        const taskCategory = document.querySelector('.subcategory-group button.active')?.getAttribute('data-subcategory');
+        const taskImportance = document.getElementById('taskImportance').value;
+        const taskStartTime = document.getElementById('taskStartTime').value;
+        const taskEndTime = document.getElementById('taskEndTime').value;
+
+        if (taskTitle && activeSlot) {
+            const taskElement = document.createElement('div');
+            taskElement.className = `task ${taskCategory} ${taskImportance}`;
+            taskElement.textContent = `${taskTitle} (${taskStartTime} - ${taskEndTime})`;
+
+            // Add delete/modify options to the task
+            const deleteBtn = document.createElement('button');
+            deleteBtn.textContent = 'Delete';
+            deleteBtn.onclick = () => taskElement.remove();
+
+            taskElement.appendChild(deleteBtn);
+            activeSlot.appendChild(taskElement);
+            taskModal.style.display = 'none'; // Close the modal
+            taskTitleInput.value = ''; // Clear form
+        }
     });
 
-    document.getElementById('nextWeek').addEventListener('click', () => {
-        currentDate.setDate(currentDate.getDate() + 7); // Move forward 1 week
-        generateTimeSlots();
+    // Close modal when clicking outside of it
+    window.onclick = function(event) {
+        if (event.target == taskModal) {
+            taskModal.style.display = 'none';
+        }
+    };
+
+    // Show/hide subcategories on click
+    document.querySelectorAll('.category-block').forEach(block => {
+        block.addEventListener('click', () => {
+            const category = block.getAttribute('data-category');
+            document.querySelectorAll('.subcategories').forEach(sub => {
+                sub.style.display = sub.getAttribute('data-category') === category ? 'flex' : 'none';
+            });
+        });
+    });
+
+    // Update importance label dynamically
+    const importanceSlider = document.getElementById('taskImportance');
+    const importanceLabel = document.getElementById('importanceLabel');
+    importanceSlider.addEventListener('input', () => {
+        const levels = ["Low", "Medium", "High"];
+        importanceLabel.textContent = levels[importanceSlider.value - 1];
     });
 
     // Initialize the calendar
